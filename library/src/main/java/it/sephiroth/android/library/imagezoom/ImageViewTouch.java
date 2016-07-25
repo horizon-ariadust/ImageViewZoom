@@ -33,6 +33,7 @@ public class ImageViewTouch extends ImageViewTouchBase {
     protected boolean mScrollEnabled = true;
     private OnImageViewTouchDoubleTapListener mDoubleTapListener;
     private OnImageViewTouchSingleTapListener mSingleTapListener;
+    private OnPinchListener mPinchListener;
 
     public ImageViewTouch(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -82,6 +83,10 @@ public class ImageViewTouch extends ImageViewTouchBase {
 
     public void setSingleTapListener(OnImageViewTouchSingleTapListener listener) {
         mSingleTapListener = listener;
+    }
+
+    public void setPinchListener(OnPinchListener listener) {
+        mPinchListener = listener;
     }
 
     public void setDoubleTapEnabled(boolean value) {
@@ -390,6 +395,11 @@ public class ImageViewTouch extends ImageViewTouchBase {
 
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
+
+            if (null != mPinchListener) {
+                mPinchListener.onPinchListener();
+            }
+
             float span = detector.getCurrentSpan() - detector.getPreviousSpan();
             float targetScale = getScale() * detector.getScaleFactor();
 
@@ -420,5 +430,9 @@ public class ImageViewTouch extends ImageViewTouchBase {
 
     public interface OnImageViewTouchSingleTapListener {
         void onSingleTapConfirmed();
+    }
+
+    public interface OnPinchListener {
+        void onPinchListener();
     }
 }
